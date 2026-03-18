@@ -60,6 +60,11 @@ nav {
   padding: 20px 48px;
   background: rgba(0, 48, 73, 0.88);
   backdrop-filter: blur(12px);
+  border-bottom: 0px solid var(--border);
+  
+}
+
+nav.rolagem {
   border-bottom: 1px solid var(--border);
 }
 
@@ -890,6 +895,7 @@ blockquote::after {
   padding: 100px 48px;
   background: var(--bg);
   font-family: var(--font-body);
+  color: var(--text);
 }
 
 .faq-inner {
@@ -934,16 +940,18 @@ blockquote::after {
   line-height: 1.7;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease, padding 0.2s;
+  transition: max-height 0.3s ease-in-out, padding 0.3s;
 }
 
 .faq-item.open .faq-a {
   max-height: 200px;
-  padding-top: 14px;
+  padding-top: 5px;
+
 }
 
 /* ─── FINAL CTA ──────────────────────────────────────────────────────────── */
 .final-cta {
+  font-family: var(--font-body);
   padding: 120px 48px;
   text-align: center;
   position: relative;
@@ -966,6 +974,7 @@ blockquote::after {
 .final-cta h2 {
   max-width: 600px;
   margin: 0 auto 20px;
+  color: var(--text);
 }
 
 .final-cta p {
@@ -993,6 +1002,12 @@ footer p {
   font-size: 13px;
   color: var(--muted2);
   font-weight: 300;
+}
+
+.footer-logo img {
+  height: 2.5em;
+  margin-right: -13px;
+  margin-bottom: 12px;
 }
 
 .footer-links {

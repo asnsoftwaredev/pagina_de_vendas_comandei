@@ -183,7 +183,9 @@
               />
             </svg>
             Você economizaria
-            <strong style="margin: 0 4px">{{ formatCurrency(economia) }}</strong>
+            <strong style="margin: 0 4px">{{
+              formatCurrency(economia)
+            }}</strong>
             neste mês
           </div>
         </div>
@@ -223,7 +225,9 @@
             <span class="plan-period">{{ plan.period }}</span>
           </div>
           <p class="plan-desc">{{ plan.desc }}</p>
-          <div v-if="plan.economia" class="plan-economia">{{ plan.economia }}</div>
+          <div v-if="plan.economia" class="plan-economia">
+            {{ plan.economia }}
+          </div>
           <ul class="plan-features">
             <li v-for="f in plan.features" :key="f">{{ f }}</li>
           </ul>
@@ -302,8 +306,8 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="logo" style="font-size: 18px">
-      comandei<span class="logo-dot">.</span>
+    <div class="logo footer-logo" style="font-size: 18px">
+      <img :src="ComandeiLogo" alt="" />omandei<span class="logo-dot">.</span>
     </div>
     <p>© 2025 Comandei Delivery. Todos os direitos reservados.</p>
     <div class="footer-links">
@@ -327,6 +331,13 @@ const economia = computed(() => Math.max(0, themTotal.value - 149.9));
 function formatCurrency(val) {
   return "R$ " + val.toFixed(2).replace(".", ",");
 }
+
+// ── NAV ──────────────────────────────────────────────────────────────────────
+window.addEventListener("scroll", function () {
+  const nav = document.querySelector("nav");
+  // Se scrollar mais de 50px, adiciona a classe, senão remove
+  nav.classList.toggle("rolagem", window.scrollY > 50);
+});
 
 // ── FAQ ──────────────────────────────────────────────────────────────────────
 const faqs = reactive([
