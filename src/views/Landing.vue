@@ -1,12 +1,6 @@
 <template>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
-    rel="stylesheet"
-  />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   <!-- NAV -->
-  <nav>
+  <nav :class="{ rolagem: scrolled }">
     <div class="logo">
       <img :src="ComandeiLogo" alt="" />omandei<span class="logo-dot">.</span>
     </div>
@@ -320,7 +314,7 @@
 </template>
 
 <script setup>
-import { ref, computed, reactive } from "vue";
+import { ref, computed, reactive, onMounted, onUnmounted } from "vue";
 import ComandeiLogo from "../assets/comandei-logo.png";
 
 // ── COMPARADOR ───────────────────────────────────────────────────────────────
@@ -334,10 +328,18 @@ function formatCurrency(val) {
 }
 
 // ── NAV ──────────────────────────────────────────────────────────────────────
-window.addEventListener("scroll", function () {
-  const nav = document.querySelector("nav");
-  // Se scrollar mais de 50px, adiciona a classe, senão remove
-  nav.classList.toggle("rolagem", window.scrollY > 50);
+const scrolled = ref(false);
+
+function handleScroll() {
+  scrolled.value = window.scrollY > 50;
+}
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
 });
 
 // ── FAQ ──────────────────────────────────────────────────────────────────────

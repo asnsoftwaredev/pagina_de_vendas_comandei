@@ -118,7 +118,6 @@ nav a:hover {
 
 .nav-cta:hover {
   opacity: 0.7 !important;
-  transform: translateY(0px);
 }
 
 /* ─── HERO ───────────────────────────────────────────────────────────────── */
@@ -358,7 +357,7 @@ h2 em {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0px;
-  background: var(--border);
+  background: transparent;
   border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
@@ -939,12 +938,12 @@ blockquote::after {
   line-height: 1.7;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out, padding 0.3s;
+  transition: max-height 0.3s ease, padding 0.3s;
 }
 
 .faq-item.open .faq-a {
   max-height: 200px;
-  padding-top: 5px;
+  padding-top: 15px;
 
 }
 
