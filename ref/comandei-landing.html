@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comandei Delivery — Seu delivery, do seu jeito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0D0D0D;
+    --bg2: #141414;
+    --bg3: #1A1A1A;
+    --card: #1E1E1E;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #FF5C2B;
+    --accent2: #FF8C5A;
+    --text: #F0EDE8;
+    --muted: #888580;
+    --muted2: #5A5856;
+    --green: #2ECC71;
+    --red-soft: #FF4444;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--text); }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .nav-cta:hover { background: var(--accent2) !important; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 120px 48px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 600px;
+    background: radial-gradient(ellipse, rgba(255,92,43,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,92,43,0.1);
+    border: 1px solid rgba(255,92,43,0.25);
+    color: var(--accent2);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    letter-spacing: 0.3px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 7vw, 80px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    max-width: 900px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 560px;
+    line-height: 1.65;
+    margin-bottom: 44px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-ctas {
+    display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 15px 34px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    background: var(--accent2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255,92,43,0.3);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    padding: 15px 34px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    border: 1px solid var(--border2);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    text-decoration: none;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+
+  .hero-note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--muted2);
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SOCIAL PROOF STRIP */
+  .proof-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 48px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    background: var(--bg2);
+  }
+  .proof-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .proof-item svg { opacity: 0.5; }
+  .proof-num {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* SECTIONS */
+  section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
+  .section-full { max-width: none; padding: 100px 0; }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 4vw, 48px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+  h2 em { font-style: normal; color: var(--accent); }
+  .section-desc {
+    font-size: 17px;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  /* BENEFITS */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .benefit-card {
+    background: var(--card);
+    padding: 36px 32px;
+    transition: background 0.2s;
+  }
+  .benefit-card:hover { background: #222; }
+  .benefit-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,92,43,0.1);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  .benefit-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+  .benefit-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* SUPPORT BLOCK */
+  .support-block {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 48px;
+  }
+  .support-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .support-steps { display: flex; flex-direction: column; gap: 0; }
+  .support-step {
+    display: flex; gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .support-step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 28px;
+    padding-top: 2px;
+  }
+  .step-content h4 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .step-content p {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* COMPARAÇÃO */
+  .compare-section {
+    background: var(--bg);
+    padding: 100px 48px;
+  }
+  .compare-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .compare-label {
+    display: inline-block;
+    background: rgba(255,92,43,0.1);
+    border: 1px solid rgba(255,92,43,0.2);
+    color: var(--accent2);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 48px;
+  }
+  .compare-card {
+    border-radius: 16px;
+    padding: 40px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .compare-card.them {
+    background: var(--bg2);
+    opacity: 0.7;
+  }
+  .compare-card.us {
+    background: var(--card);
+    border-color: rgba(255,92,43,0.3);
+  }
+  .compare-tag {
+    position: absolute; top: -12px; left: 32px;
+    font-size: 12px; font-weight: 500;
+    padding: 4px 14px; border-radius: 100px;
+  }
+  .compare-tag.bad { background: rgba(255,68,68,0.15); color: #FF8080; border: 1px solid rgba(255,68,68,0.2); }
+  .compare-tag.good { background: rgba(46,204,113,0.12); color: #5DEBA8; border: 1px solid rgba(46,204,113,0.2); }
+  .compare-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .compare-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .compare-calc {
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .calc-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px;
+    color: var(--muted);
+    padding: 6px 0;
+  }
+  .calc-row.total {
+    border-top: 1px solid var(--border2);
+    margin-top: 8px;
+    padding-top: 12px;
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .calc-row.total.bad-total { color: #FF8080; }
+  .calc-row.total.good-total { color: #5DEBA8; }
+
+  .slider-wrapper {
+    margin-top: 32px;
+    padding: 28px 32px;
+    background: var(--bg2);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .slider-label {
+    display: flex; justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .slider-label strong { color: var(--text); font-weight: 500; }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border2);
+    outline: none;
+    margin-bottom: 16px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(255,92,43,0.2);
+  }
+  .economy-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(46,204,113,0.1);
+    border: 1px solid rgba(46,204,113,0.2);
+    color: #5DEBA8;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* PLANOS */
+  .plans-section { padding: 100px 48px; }
+  .plans-inner { max-width: 900px; margin: 0 auto; }
+  .plans-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 48px;
+  }
+  .plan-card {
+    border-radius: 16px;
+    padding: 40px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    position: relative;
+  }
+  .plan-card.featured {
+    border-color: rgba(255,92,43,0.4);
+    background: linear-gradient(135deg, #1E1E1E 0%, #221810 100%);
+  }
+  .plan-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 16px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .plan-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .plan-price {
+    display: flex; align-items: baseline; gap: 4px;
+    margin-bottom: 6px;
+  }
+  .plan-currency { font-size: 20px; color: var(--muted); font-weight: 300; }
+  .plan-amount {
+    font-family: var(--font-display);
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+  .plan-period { font-size: 14px; color: var(--muted); font-weight: 300; }
+  .plan-desc { font-size: 13px; color: var(--muted); margin-bottom: 32px; font-weight: 300; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .plan-features li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 14px; color: var(--muted); font-weight: 300;
+  }
+  .plan-features li::before {
+    content: '';
+    width: 16px; height: 16px;
+    min-width: 16px;
+    background: rgba(46,204,113,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2 2 4-4' stroke='%232ECC71' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .plan-economy {
+    font-size: 12px;
+    color: #5DEBA8;
+    background: rgba(46,204,113,0.08);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+
+  /* DEPOIMENTO */
+  .testimonial-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 48px;
+  }
+  .testimonial-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  blockquote {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--text);
+    margin-bottom: 32px;
+    letter-spacing: -0.5px;
+  }
+  blockquote::before { content: '\201C'; color: var(--accent); }
+  blockquote::after { content: '\201D'; color: var(--accent); }
+  .testimonial-author {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+  }
+  .author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .author-info { text-align: left; }
+  .author-name { font-size: 15px; font-weight: 500; }
+  .author-role { font-size: 13px; color: var(--muted); font-weight: 300; }
+
+  /* FAQ */
+  .faq-section { padding: 100px 48px; }
+  .faq-inner { max-width: 680px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 0;
+  }
+  .faq-q {
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px;
+    user-select: none;
+  }
+  .faq-q::after {
+    content: '+';
+    font-size: 22px;
+    color: var(--muted);
+    font-weight: 300;
+    transition: transform 0.2s;
+    min-width: 20px;
+    text-align: center;
+  }
+  .faq-item.open .faq-q::after { transform: rotate(45deg); }
+  .faq-a {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.2s;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-top: 14px; }
+
+  /* FINAL CTA */
+  .final-cta {
+    padding: 120px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: '';
+    position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(255,92,43,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .final-cta h2 { max-width: 600px; margin: 0 auto 20px; }
+  .final-cta p { color: var(--muted); font-size: 16px; font-weight: 300; margin-bottom: 40px; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  footer p { font-size: 13px; color: var(--muted2); font-weight: 300; }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { font-size: 13px; color: var(--muted2); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero, section, .support-block, .compare-section, .plans-section, .testimonial-section, .faq-section, .final-cta { padding-left: 24px; padding-right: 24px; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .support-inner { grid-template-columns: 1fr; gap: 48px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .plans-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; align-items: flex-start; }
+    .proof-strip { padding: 18px 24px; gap: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">comandei<span>.</span></div>
+  <div class="nav-links">
+    <a href="#beneficios">Benefícios</a>
+    <a href="#suporte">Suporte</a>
+    <a href="#planos">Planos</a>
+    <a href="#planos" class="nav-cta">Começar agora</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Feito para quem trabalha de verdade</div>
+  <h1>Seu delivery organizado,<br>sem complicação e<br><em>sem taxa por pedido</em></h1>
+  <p class="hero-sub">
+    Tudo que você precisa pra gerenciar seu delivery — pedidos, entregadores, bairros, relatórios — num sistema que o seu suporte conhece pelo nome.
+  </p>
+  <div class="hero-ctas">
+    <a href="#planos" class="btn-primary">Quero começar agora</a>
+    <a href="#beneficios" class="btn-ghost">Ver como funciona</a>
+  </div>
+  <p class="hero-note">Sem taxa por pedido &nbsp;·&nbsp; Suporte real &nbsp;·&nbsp; Cancele quando quiser</p>
+</section>
+
+<!-- PROOF STRIP -->
+<div class="proof-strip">
+  <div class="proof-item">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
+    <span><span class="proof-num">+200</span> &nbsp;empresas ativas</span>
+  </div>
+  <div class="proof-item">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <span><span class="proof-num">&lt;2h</span> &nbsp;tempo médio de resposta</span>
+  </div>
+  <div class="proof-item">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <span><span class="proof-num">R$ 0</span> &nbsp;de taxa por pedido</span>
+  </div>
+  <div class="proof-item">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+    <span><span class="proof-num">Mensal</span> &nbsp;atualizações contínuas</span>
+  </div>
+</div>
+
+<!-- BENEFÍCIOS -->
+<section id="beneficios" style="padding-top:100px; padding-bottom:100px; max-width:1100px; margin:0 auto; padding-left:48px; padding-right:48px;">
+  <div class="section-label">O que muda no seu dia a dia</div>
+  <h2>Cada parte do negócio<br><em>sob controle</em></h2>
+  <p class="section-desc">Não são apenas funcionalidades. É o que você vai parar de se preocupar a partir do primeiro acesso.</p>
+
+  <div class="benefits-grid">
+    <div class="benefit-card">
+      <div class="benefit-icon">🛵</div>
+      <div class="benefit-title">Seus motoboys sabem o que fazer</div>
+      <p class="benefit-desc">Gerencie entregadores, acompanhe disponibilidade e organize as rotas sem precisar ficar no telefone toda vez que sai um pedido.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🗺️</div>
+      <div class="benefit-title">Cada bairro com seu preço justo</div>
+      <p class="benefit-desc">Configure taxas por bairro e saiba exatamente quanto entra em cada entrega. Sem chute, sem prejuízo escondido no frete.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">📊</div>
+      <div class="benefit-title">O que está vendendo, em dois minutos</div>
+      <p class="benefit-desc">Relatório de pedidos com total vendido, produtos mais pedidos e cancelamentos. Decisão com dado, não com achismo.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🕐</div>
+      <div class="benefit-title">O cardápio abre e fecha sozinho</div>
+      <p class="benefit-desc">Configure seus horários uma vez. O sistema para de receber pedido quando você fecha e volta a aceitar quando abre. Sem pedido chegando fora de hora.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">💳</div>
+      <div class="benefit-title">Seu cliente paga como quiser</div>
+      <p class="benefit-desc">Pix, dinheiro, cartão — você configura quais aceita. Nenhuma venda perdida por falta de opção de pagamento.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🔌</div>
+      <div class="benefit-title">Pronto pra crescer com você</div>
+      <p class="benefit-desc">Novas integrações entram conforme o mercado pede. Você sugere, a gente ouve, e o sistema evolui junto com o seu negócio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SUPORTE -->
+<div class="support-block" id="suporte">
+  <div class="support-inner">
+    <div>
+      <div class="section-label">Suporte que resolve</div>
+      <h2>Quando você trava,<br><em>a gente desbloqueia</em></h2>
+      <p class="section-desc" style="margin-bottom:0">Não tem bot. Não tem fila de 3 dias. Tem uma equipe que conhece o sistema e sabe que seu delivery não pode parar.</p>
+    </div>
+    <div class="support-steps">
+      <div class="support-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h4>Você abre o chamado</h4>
+          <p>Via chat, WhatsApp ou e-mail — como for mais fácil pra você no momento.</p>
+        </div>
+      </div>
+      <div class="support-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h4>A gente entende o problema</h4>
+          <p>Nada de resposta automática genérica. Alguém lê, entende o contexto e já começa a resolver.</p>
+        </div>
+      </div>
+      <div class="support-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h4>Resolvido com retorno claro</h4>
+          <p>Você sabe o que foi feito, por que aconteceu e o que fazer se aparecer de novo. Sem você ficar no escuro.</p>
+        </div>
+      </div>
+      <div class="support-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h4>Vira melhoria no sistema</h4>
+          <p>Problemas recorrentes entram no roadmap. O que te atrapalhou hoje pode ser resolvido de vez pra todo mundo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARAÇÃO -->
+<div class="compare-section">
+  <div class="compare-inner">
+    <div class="compare-label">Faça a conta você mesmo</div>
+    <h2 style="font-family:'Syne',sans-serif; font-size:clamp(30px,4vw,48px); font-weight:700; line-height:1.1; letter-spacing:-1px; margin-bottom:12px;">
+      Quanto você estaria<br><em style="font-style:normal; color:var(--accent)">pagando por pedido?</em>
+    </h2>
+    <p style="font-size:17px; color:var(--muted); font-weight:300; max-width:500px; line-height:1.7;">
+      Arraste o slider com o volume de pedidos do seu negócio e veja a diferença.
+    </p>
+
+    <div class="slider-wrapper">
+      <div class="slider-label">
+        <span>Pedidos por mês</span>
+        <strong id="pedidos-label">300 pedidos</strong>
+      </div>
+      <input type="range" id="pedidos-range" min="50" max="2000" step="50" value="300">
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card them">
+        <div class="compare-tag bad">Modelo com taxa por pedido</div>
+        <div class="compare-title">Plataforma com taxa</div>
+        <div class="compare-sub">Você paga por cada pedido que entra</div>
+        <div class="compare-calc">
+          <div class="calc-row"><span>Pedidos no mês</span><span id="them-orders">300</span></div>
+          <div class="calc-row"><span>Taxa por pedido</span><span>R$ 1,99</span></div>
+          <div class="calc-row"><span>Mensalidade base</span><span>R$ 79,90</span></div>
+          <div class="calc-row total bad-total"><span>Total no mês</span><span id="them-total">R$ 676,90</span></div>
+        </div>
+        <p style="font-size:12px; color:var(--muted2); font-weight:300;">* Valores ilustrativos baseados em modelos de cobrança comuns no mercado</p>
+      </div>
+
+      <div class="compare-card us">
+        <div class="compare-tag good">Comandei</div>
+        <div class="compare-title">Mensalidade fixa</div>
+        <div class="compare-sub">Quanto mais você vende, mais você economiza</div>
+        <div class="compare-calc">
+          <div class="calc-row"><span>Pedidos no mês</span><span id="us-orders">300</span></div>
+          <div class="calc-row"><span>Taxa por pedido</span><span style="color:#5DEBA8">R$ 0,00</span></div>
+          <div class="calc-row"><span>Mensalidade fixa</span><span>R$ 149,90</span></div>
+          <div class="calc-row total good-total"><span>Total no mês</span><span id="us-total">R$ 149,90</span></div>
+        </div>
+        <div class="economy-badge">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          Você economizaria <strong id="economy-val" style="margin:0 4px">R$ 527,00</strong> neste mês
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANOS -->
+<div class="plans-section" id="planos">
+  <div class="plans-inner">
+    <div style="text-align:center; margin-bottom:0;">
+      <div class="section-label" style="text-align:center">Simples assim</div>
+      <h2 style="text-align:center">Um preço fixo.<br><em>Sem surpresa no mês.</em></h2>
+      <p class="section-desc" style="text-align:center; margin:16px auto 0; max-width:400px">Escolha como prefere pagar. Cancele quando quiser, sem multa e sem burocracia.</p>
+    </div>
+
+    <div class="plans-grid" style="margin-top:56px">
+      <div class="plan-card">
+        <div class="plan-name">Mensal</div>
+        <div class="plan-price">
+          <span class="plan-currency">R$</span>
+          <span class="plan-amount">149</span>
+          <span class="plan-period">,90/mês</span>
+        </div>
+        <p class="plan-desc">Ideal pra quem quer testar sem compromisso.</p>
+        <ul class="plan-features">
+          <li>Gerenciamento completo de pedidos</li>
+          <li>Controle de entregadores</li>
+          <li>Bairros e taxas configuráveis</li>
+          <li>Relatórios de desempenho</li>
+          <li>Suporte via chat e WhatsApp</li>
+          <li>Atualizações incluídas</li>
+        </ul>
+        <a href="#" class="btn-ghost" style="display:block; text-align:center; padding:14px;">Começar agora</a>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Mais escolhido</div>
+        <div class="plan-name">Anual</div>
+        <div class="plan-price">
+          <span class="plan-currency">R$</span>
+          <span class="plan-amount">119</span>
+          <span class="plan-period">,90/mês</span>
+        </div>
+        <p class="plan-desc">Pague uma vez, use o ano todo com desconto.</p>
+        <div class="plan-economy">Você economiza R$ 359,90 comparado ao mensal</div>
+        <ul class="plan-features">
+          <li>Tudo do plano mensal</li>
+          <li>Prioridade no suporte</li>
+          <li>Acesso antecipado a novas integrações</li>
+          <li>Onboarding guiado com a equipe</li>
+        </ul>
+        <a href="#" class="btn-primary" style="display:block; text-align:center; padding:14px;">Quero o plano anual</a>
+      </div>
+    </div>
+
+    <p style="text-align:center; font-size:13px; color:var(--muted2); margin-top:24px; font-weight:300;">
+      Sem taxa de setup &nbsp;·&nbsp; Sem fidelidade no mensal &nbsp;·&nbsp; Nota fiscal incluída
+    </p>
+  </div>
+</div>
+
+<!-- DEPOIMENTO -->
+<div class="testimonial-section">
+  <div class="testimonial-inner">
+    <blockquote>
+      Antes eu gastava horas toda semana tentando organizar os pedidos no papel. Hoje abro o Comandei e em cinco minutos já sei o que aconteceu no dia.
+    </blockquote>
+    <div class="testimonial-author">
+      <div class="author-avatar">MR</div>
+      <div class="author-info">
+        <div class="author-name">Marcos Rodrigues</div>
+        <div class="author-role">Dono da Burger do Marcos — Feira de Santana, BA</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="faq-inner">
+    <div style="text-align:center; margin-bottom:48px;">
+      <div class="section-label" style="text-align:center">Perguntas frequentes</div>
+      <h2 style="text-align:center">Tira as dúvidas<br><em>antes de começar</em></h2>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Preciso de treinamento pra usar o sistema?</div>
+      <div class="faq-a">Não. O sistema foi pensado pra quem não tem gerente de TI. Você cria sua conta, cadastra sua empresa com CNPJ e razão social, e já consegue usar. Se tiver dúvida em qualquer passo, o suporte está disponível pra te guiar.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Posso cancelar a qualquer momento?</div>
+      <div class="faq-a">Sim. No plano mensal, você cancela quando quiser sem multa e sem burocracia. No plano anual, você tem acesso até o fim do período pago.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Funciona no celular?</div>
+      <div class="faq-a">Sim, o sistema é acessível direto pelo navegador do celular, tablet ou computador. Não precisa instalar nada.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">O sistema tem integração com apps de delivery como iFood?</div>
+      <div class="faq-a">Estamos em desenvolvimento constante de novas integrações. Se você tem uma integração específica que precisa, fale com nosso time — a gente ouve e prioriza conforme a demanda dos clientes.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">E se eu tiver um problema no meio de uma operação?</div>
+      <div class="faq-a">O suporte funciona em horário comercial e nosso tempo médio de resposta é abaixo de 2 horas. Em casos urgentes durante operação, priorizamos o atendimento.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="final-cta">
+  <div class="section-label" style="text-align:center">Pronto pra começar?</div>
+  <h2>Seu delivery organizado<br><em>ainda esta semana</em></h2>
+  <p>Cadastro em menos de 5 minutos. Só CNPJ e razão social pra começar.</p>
+  <a href="#planos" class="btn-primary" style="font-size:16px; padding:16px 44px;">Criar minha conta agora</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo" style="font-size:18px">comandei<span style="color:var(--accent)">.</span></div>
+  <p>© 2025 Comandei Delivery. Todos os direitos reservados.</p>
+  <div class="footer-links">
+    <a href="#">Termos de uso</a>
+    <a href="#">Privacidade</a>
+    <a href="#">Contato</a>
+  </div>
+</footer>
+
+<script>
+  const range = document.getElementById('pedidos-range');
+  const label = document.getElementById('pedidos-label');
+
+  function updateCalc(val) {
+    const pedidos = parseInt(val);
+    label.textContent = pedidos + ' pedidos';
+
+    const themTaxa = 1.99;
+    const themBase = 79.90;
+    const usFixed = 149.90;
+
+    const themTotal = (pedidos * themTaxa) + themBase;
+    const economy = themTotal - usFixed;
+
+    document.getElementById('them-orders').textContent = pedidos;
+    document.getElementById('us-orders').textContent = pedidos;
+    document.getElementById('them-total').textContent = 'R$ ' + themTotal.toFixed(2).replace('.', ',');
+    document.getElementById('us-total').textContent = 'R$ 149,90';
+    document.getElementById('economy-val').textContent = 'R$ ' + Math.max(0, economy).toFixed(2).replace('.', ',');
+  }
+
+  range.addEventListener('input', e => updateCalc(e.target.value));
+  updateCalc(300);
+
+  function toggleFaq(el) {
+    const item = el.closest('.faq-item');
+    item.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
