@@ -63,7 +63,7 @@
     </p>
     <div class="benefits-grid">
       <div v-for="b in benefits" :key="b.title" class="benefit-card">
-        <div class="benefit-icon">{{ b.icon }}</div>
+        <div class="benefit-icon" v-html="b.icon"></div>
         <div class="benefit-title">{{ b.title }}</div>
         <p class="benefit-desc">{{ b.desc }}</p>
       </div>
@@ -401,32 +401,32 @@ const proofItems = [
 
 const benefits = [
   {
-    icon: "🛵",
+    icon: '<i class="fa-solid fa-motorcycle"></i>',
     title: "Seus motoboys sabem o que fazer",
     desc: "Gerencie entregadores, acompanhe disponibilidade e organize as rotas sem precisar ficar no telefone toda vez que sai um pedido.",
   },
   {
-    icon: "🗺️",
+    icon: '<i class="fa-solid fa-map"></i>',
     title: "Cada bairro com seu preço justo",
     desc: "Configure taxas por bairro e saiba exatamente quanto entra em cada entrega. Sem chute, sem prejuízo escondido no frete.",
   },
   {
-    icon: "📊",
+    icon: '<i class="fa-solid fa-chart-column"></i>',
     title: "O que está vendendo, em dois minutos",
     desc: "Relatório de pedidos com total vendido, produtos mais pedidos e cancelamentos. Decisão com dado, não com achismo.",
   },
   {
-    icon: "🕐",
+    icon: '<i class="fa-solid fa-clock"></i>',
     title: "O cardápio abre e fecha sozinho",
     desc: "Configure seus horários uma vez. O sistema para de receber pedido quando você fecha e volta a aceitar quando abre. Sem pedido chegando fora de hora.",
   },
   {
-    icon: "💳",
+    icon: '<i class="fa-solid fa-credit-card"></i>',
     title: "Seu cliente paga como quiser",
     desc: "Pix, dinheiro, cartão — você configura quais aceita. Nenhuma venda perdida por falta de opção de pagamento.",
   },
   {
-    icon: "🔌",
+    icon: '<i class="fa-solid fa-plug"></i>',
     title: "Pronto pra crescer com você",
     desc: "Novas integrações entram conforme o mercado pede. Você sugere, a gente ouve, e o sistema evolui junto com o seu negócio.",
   },
