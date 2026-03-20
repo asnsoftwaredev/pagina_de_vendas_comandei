@@ -4,12 +4,14 @@
     <div class="logo">
       <img :src="ComandeiLogo" alt="" />omandei<span class="logo-dot">.</span>
     </div>
+
     <div class="nav-links">
       <a href="#beneficios">Benefícios</a>
       <a href="#suporte">Suporte</a>
       <a href="#planos">Planos</a>
       <a href="#planos" class="nav-cta">Começar agora</a>
     </div>
+
     <button
       class="mobile-menu-btn"
       @click="mobileOpen = !mobileOpen"
@@ -17,14 +19,28 @@
     >
       <span></span><span></span><span></span>
     </button>
-    <div class="mobile-menu" :class="{ open: mobileOpen }">
-      <a href="#beneficios" @click="mobileOpen = false">Benefícios</a>
-      <a href="#suporte" @click="mobileOpen = false">Suporte</a>
-      <a href="#planos" @click="mobileOpen = false">Planos</a>
-      <a href="#planos" class="nav-cta" @click="mobileOpen = false"
-        >Começar agora</a
-      >
-    </div>
+
+    <Transition name="menu">
+      <div class="mobile-menu" v-if="mobileOpen">
+        <div class="mobile-menu-links">
+          <a href="#beneficios" @click="mobileOpen = false">Benefícios</a>
+          <a href="#suporte" @click="mobileOpen = false">Suporte</a>
+          <a href="#planos" @click="mobileOpen = false">Planos</a>
+        </div>
+        <a href="#planos" class="nav-cta mobile-cta" @click="mobileOpen = false"
+          >Começar agora</a
+        >
+      </div>
+    </Transition>
+
+    <!-- overlay para fechar clicando fora -->
+    <Transition name="fade">
+      <div
+        class="mobile-overlay"
+        v-if="mobileOpen"
+        @click="mobileOpen = false"
+      ></div>
+    </Transition>
   </nav>
 
   <!-- HERO -->
