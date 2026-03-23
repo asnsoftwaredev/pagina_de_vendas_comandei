@@ -43,6 +43,83 @@
     </Transition>
   </nav>
 
+  <!-- POPUP -->
+  <Transition name="popup">
+    <div
+      class="popup-overlay"
+      v-if="popupVisible"
+      @click.self="popupVisible = false"
+    >
+      <div class="popup">
+        <button class="popup-close" @click="popupVisible = false">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M18 6L6 18M6 6l12 12"
+            />
+          </svg>
+        </button>
+
+        <div class="popup-badge">Oferta por tempo limitado</div>
+
+        <div class="popup-body">
+          <p class="popup-pre">Plano Anual com</p>
+          <div class="popup-discount">20% OFF</div>
+          <div class="popup-price-row">
+            <span class="popup-from">De <s>R$ 149,90</s></span>
+            <div class="popup-price">
+              <span class="popup-currency">R$</span>
+              <span class="popup-amount">119</span>
+              <span class="popup-period">,90/mês</span>
+            </div>
+          </div>
+          <p class="popup-sub">
+            Pague uma vez, use o ano todo. Cancele quando quiser.
+          </p>
+        </div>
+
+        <div class="popup-timer">
+          <span class="timer-label">Oferta expira em</span>
+          <div class="timer-blocks">
+            <div class="timer-block">
+              <span class="timer-num">{{ timerDisplay.h }}</span>
+              <span class="timer-unit">h</span>
+            </div>
+            <span class="timer-sep">:</span>
+            <div class="timer-block">
+              <span class="timer-num">{{ timerDisplay.m }}</span>
+              <span class="timer-unit">min</span>
+            </div>
+            <span class="timer-sep">:</span>
+            <div class="timer-block">
+              <span class="timer-num">{{ timerDisplay.s }}</span>
+              <span class="timer-unit">seg</span>
+            </div>
+          </div>
+        </div>
+
+        <a
+          href="#planos"
+          class="btn-primary popup-cta"
+          @click="popupVisible = false"
+        >
+          Quero o plano anual agora
+        </a>
+        <button class="popup-skip" @click="popupVisible = false">
+          Não, prefiro pagar mais caro
+        </button>
+      </div>
+    </div>
+  </Transition>
+
   <!-- HERO -->
   <section class="hero">
     <div class="hero-eyebrow">Feito para quem trabalha de verdade</div>
@@ -322,6 +399,31 @@
       <a href="#">Contato</a>
     </div>
   </footer>
+
+  <Transition name="fade">
+    <button
+      class="popup-reopen"
+      v-if="popupShown && !popupVisible"
+      @click="popupVisible = true"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M7 7h10M7 12h10M7 17h6"
+        />
+      </svg>
+      <span>Ver oferta</span>
+      <div class="popup-reopen-badge">20% OFF</div>
+    </button>
+  </Transition>
 </template>
 
 <script setup>
@@ -345,8 +447,52 @@ function handleScroll() {
   scrolled.value = window.scrollY > 50;
 }
 
-onMounted(() => window.addEventListener("scroll", handleScroll));
-onUnmounted(() => window.removeEventListener("scroll", handleScroll));
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("scroll", handleScrollPopup);
+});
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("scroll", handleScrollPopup);
+  clearInterval(timerInterval);
+});
+
+// ── POPUP ─────────────────────────────────────────────────────────────────
+const popupVisible = ref(false);
+const popupShown = ref(false);
+
+const timerSeconds = ref(5580);
+let timerInterval = null;
+
+const timerDisplay = computed(() => {
+  const h = Math.floor(timerSeconds.value / 3600);
+  const m = Math.floor((timerSeconds.value % 3600) / 60);
+  const s = timerSeconds.value % 60;
+  return {
+    h: String(h).padStart(2, "0"),
+    m: String(m).padStart(2, "0"),
+    s: String(s).padStart(2, "0"),
+  };
+});
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    if (timerSeconds.value > 0) {
+      timerSeconds.value--;
+    } else {
+      clearInterval(timerInterval);
+    }
+  }, 1000);
+}
+
+function handleScrollPopup() {
+  if (!popupShown.value && window.scrollY > 4000) {
+    popupVisible.value = true;
+    popupShown.value = true;
+    startTimer();
+    window.removeEventListener("scroll", handleScrollPopup);
+  }
+}
 
 const faqs = reactive([
   {
