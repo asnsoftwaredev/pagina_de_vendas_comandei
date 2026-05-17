@@ -647,10 +647,7 @@ const plans = reactive([
 
 async function carregarCheckout() {
   try {
-    const res = await fetch(
-      "https://api.asnsoftware.com.br/planos/search?sistemaNome=SGI",
-      { headers: { TenantId: "40816156000160", Accept: "application/json" } }
-    );
+    const res = await fetch("/api-planos/planos/search?sistemaNome=SGI");
     if (!res.ok) return;
     const data = await res.json();
     const apiPlanos = data.content || [];
