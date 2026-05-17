@@ -107,7 +107,7 @@
         </div>
 
         <a
-          :href="plans[1].checkoutUrl"
+          :href="featuredPlan.checkoutUrl"
           class="btn-primary popup-cta"
           @click="popupVisible = false"
         >
@@ -303,9 +303,14 @@
           <div v-if="plan.badge" class="plan-badge">{{ plan.badge }}</div>
           <div class="plan-name">{{ plan.name }}</div>
           <div class="plan-price">
-            <span class="plan-currency">R$</span>
-            <span class="plan-amount">{{ plan.amount }}</span>
-            <span class="plan-period">{{ plan.period }}</span>
+            <div v-if="plan.precoOriginal" class="plan-price-from">
+              De <s>R$ {{ plan.precoOriginal }}</s>
+            </div>
+            <div class="plan-price-main">
+              <span class="plan-currency">R$</span>
+              <span class="plan-amount">{{ plan.amount }}</span>
+              <span class="plan-period">{{ plan.period }}</span>
+            </div>
           </div>
           <p class="plan-desc">{{ plan.desc }}</p>
           <div v-if="plan.economia" class="plan-economia">
@@ -450,7 +455,7 @@ function handleScroll() {
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   window.addEventListener("scroll", handleScrollPopup);
-  carregarCheckout();
+  carregarPlanos();
 });
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
@@ -645,22 +650,79 @@ const plans = reactive([
   },
 ]);
 
-async function carregarCheckout() {
+const featuredPlan = computed(
+  () => plans.find((p) => p.featured) ?? plans[plans.length - 1]
+);
+
+function formatPrice(preco) {
+  const [int, dec] = preco.toFixed(2).split(".");
+  return { amount: int, period: (dec === "00" ? "" : `,${dec}`) + "/mês" };
+}
+
+function formatPrecoFull(preco) {
+  const [int, dec] = preco.toFixed(2).split(".");
+  return dec === "00" ? int : `${int},${dec}`;
+}
+
+function buildFeatures(p) {
+  const features = (p.recursos || "")
+    .split(/[\r\n,]+/)
+    .map((f) => f.trim())
+    .filter(Boolean);
+  if (p.limiteTerminais > 0) {
+    const t = p.limiteTerminais;
+    features.unshift(`Até ${t} terminal${t > 1 ? "is" : ""} incluído${t > 1 ? "s" : ""}`);
+  }
+  if (p.precoPorTerminal > 0) {
+    features.push(`+ R$ ${formatPrecoFull(p.precoPorTerminal)} por terminal adicional`);
+  }
+  return features;
+}
+
+async function carregarPlanos() {
   try {
     const res = await fetch("/api-planos/planos/search?sistemaNome=SGI");
     if (!res.ok) return;
     const data = await res.json();
-    const apiPlanos = data.content || [];
-    apiPlanos.forEach((p) => {
-      const url = "https://crm.asnsoftware.com.br/checkout?plano=" + p.id;
-      if (p.preco <= 130) {
-        plans[1].checkoutUrl = url;
-      } else {
-        plans[0].checkoutUrl = url;
-      }
+    const apiPlanos = (data.content || [])
+      .filter((p) => p.ativo)
+      .sort((a, b) => a.duracaoDias - b.duracaoDias || a.sequencia - b.sequencia);
+
+    if (!apiPlanos.length) return;
+
+    const maxDuracao = Math.max(...apiPlanos.map((p) => p.duracaoDias));
+
+    const mensal = apiPlanos.find((p) => p.duracaoDias <= 31);
+    const anual = apiPlanos.find((p) => p.duracaoDias >= 360);
+    let economiaAnual = null;
+    if (mensal && anual && anual.preco < mensal.preco) {
+      const diff = (mensal.preco - anual.preco) * 12;
+      economiaAnual = `Você economiza R$ ${diff.toFixed(2).replace(".", ",")} comparado ao mensal`;
+    }
+
+    const mapped = apiPlanos.map((p) => {
+      const precoExibido = p.precoPromocional > 0 ? p.precoPromocional : p.preco;
+      const { amount, period } = formatPrice(precoExibido);
+      const precoOriginal = p.precoPromocional > 0 ? formatPrecoFull(p.preco) : null;
+      const isFeatured = p.duracaoDias === maxDuracao;
+      return {
+        name: p.nome,
+        amount,
+        period,
+        precoOriginal,
+        desc: p.descricao,
+        featured: isFeatured,
+        badge: isFeatured ? "Mais escolhido" : null,
+        economia: isFeatured ? economiaAnual : null,
+        cta: isFeatured ? "Quero este plano" : "Começar agora",
+        checkoutUrl: "https://crm.asnsoftware.com.br/checkout?plano=" + p.id,
+        features: buildFeatures(p),
+      };
     });
+
+    plans.splice(0, plans.length, ...mapped);
   } catch (e) {
-    console.error("Erro ao buscar planos:", e);
+    console.error("Erro ao carregar planos:", e);
   }
 }
 </script>

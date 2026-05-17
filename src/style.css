@@ -1016,9 +1016,21 @@ input[type=range]::-webkit-slider-thumb:hover {
 
 .plan-price {
   display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.plan-price-from {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  font-weight: 300;
+}
+
+.plan-price-main {
+  display: flex;
   align-items: baseline;
   gap: 4px;
-  margin-bottom: 6px;
 }
 
 .plan-currency {
