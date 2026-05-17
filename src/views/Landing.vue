@@ -107,7 +107,7 @@
         </div>
 
         <a
-          href="#planos"
+          :href="plans[1].checkoutUrl"
           class="btn-primary popup-cta"
           @click="popupVisible = false"
         >
@@ -315,7 +315,7 @@
             <li v-for="f in plan.features" :key="f">{{ f }}</li>
           </ul>
           <a
-            href="#"
+            :href="plan.checkoutUrl"
             :class="plan.featured ? 'btn-primary' : 'btn-ghost'"
             style="display: block; text-align: center; padding: 14px"
           >
@@ -450,6 +450,7 @@ function handleScroll() {
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   window.addEventListener("scroll", handleScrollPopup);
+  carregarCheckout();
 });
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
@@ -605,7 +606,7 @@ const supportSteps = [
   },
 ];
 
-const plans = [
+const plans = reactive([
   {
     name: "Mensal",
     amount: "149",
@@ -615,6 +616,7 @@ const plans = [
     badge: null,
     economia: null,
     cta: "Começar agora",
+    checkoutUrl: "#planos",
     features: [
       "Gerenciamento completo de pedidos",
       "Controle de entregadores",
@@ -633,6 +635,7 @@ const plans = [
     badge: "Mais escolhido",
     economia: "Você economiza R$ 359,90 comparado ao mensal",
     cta: "Quero o plano anual",
+    checkoutUrl: "#planos",
     features: [
       "Tudo do plano mensal",
       "Prioridade no suporte",
@@ -640,5 +643,27 @@ const plans = [
       "Onboarding guiado com a equipe",
     ],
   },
-];
+]);
+
+async function carregarCheckout() {
+  try {
+    const res = await fetch(
+      "https://api.asnsoftware.com.br/planos/search?sistemaNome=SGI",
+      { headers: { TenantId: "40816156000160", Accept: "application/json" } }
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    const apiPlanos = data.content || [];
+    apiPlanos.forEach((p) => {
+      const url = "https://crm.asnsoftware.com.br/checkout?plano=" + p.id;
+      if (p.preco <= 130) {
+        plans[1].checkoutUrl = url;
+      } else {
+        plans[0].checkoutUrl = url;
+      }
+    });
+  } catch (e) {
+    console.error("Erro ao buscar planos:", e);
+  }
+}
 </script>
