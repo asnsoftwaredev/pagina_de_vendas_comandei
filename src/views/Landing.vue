@@ -28,7 +28,7 @@
           <a href="#planos" @click="mobileOpen = false">Planos</a>
         </div>
         <a href="#planos" class="nav-cta mobile-cta" @click="mobileOpen = false"
-          >Começar agora</a
+          >Comprar agora</a
         >
       </div>
     </Transition>
@@ -133,7 +133,7 @@
       bairros, relatórios — num sistema que o seu suporte conhece pelo nome.
     </p>
     <div class="hero-ctas">
-      <a href="#planos" class="btn-primary">Quero começar agora</a>
+      <a href="#planos" class="btn-primary">Quero comprar agora</a>
       <a href="#beneficios" class="btn-ghost">Ver como funciona</a>
     </div>
     <p class="hero-note">
@@ -178,104 +178,6 @@
     </div>
   </section>
 
-  <!-- SUPORTE -->
-  <div class="support-block" id="suporte">
-    <div class="support-inner">
-      <div>
-        <div class="section-label">Suporte que resolve</div>
-        <h2>Quando você trava,<br /><em>a gente desbloqueia</em></h2>
-        <p class="section-desc" style="margin-bottom: 0">
-          Não tem bot. Não tem fila de 3 dias. Tem uma equipe que conhece o
-          sistema e sabe que seu delivery não pode parar.
-        </p>
-      </div>
-      <div class="support-steps">
-        <div v-for="step in supportSteps" :key="step.num" class="support-step">
-          <div class="step-num">{{ step.num }}</div>
-          <div class="step-content">
-            <h4>{{ step.title }}</h4>
-            <p>{{ step.desc }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- COMPARAÇÃO -->
-  <div class="compare-section">
-    <div class="compare-inner">
-      <div class="compare-part1">
-        <div class="compare-label">Faça a conta você mesmo</div>
-        <h2 class="compare-h2">
-          Clientes comandei<br /><em>pagam zero taxa por pedido!</em>
-        </h2>
-        <p class="compare-desc">
-          Arraste o slider com o volume de pedidos do seu negócio e veja a
-          diferença.
-        </p>
-      </div>
-      <div class="compare-part2">
-        <div class="form-wrapper">
-          <div class="form-label">
-            <span>Pedidos por mês</span>
-            <strong>{{ pedidos }} pedidos</strong>
-          </div>
-          <div class="range-track">
-            <div
-              class="range-fill"
-              :style="{ width: rangePercent + '%' }"
-            ></div>
-            <input
-              type="range"
-              v-model.number="pedidos"
-              min="50"
-              max="2000"
-              step="50"
-            />
-          </div>
-        </div>
-        <div class="compare-stack">
-          <div class="compare-card">
-            <div class="compare-row them">
-              <img :src="GenericoLogo" alt="" class="logo-card" />
-              <div class="compare-calc">
-                <div class="compare-tag bad">Concorrência</div>
-                <div class="calc-row">
-                  <span>Taxa por pedido</span><span>R$ 1,99</span>
-                </div>
-                <div class="calc-row">
-                  <span>Mensalidade base</span><span>R$ 79,90</span>
-                </div>
-                <div class="calc-row total bad-total">
-                  <span>Total no mês</span
-                  ><span>{{ formatCurrency(themTotal) }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="compare-divider">VS</div>
-
-            <div class="compare-row uss">
-              <img :src="ComandeiLogo" alt="" class="logo-card" />
-              <div class="compare-calc">
-                <div class="compare-tag good">Comandei</div>
-                <div class="calc-row">
-                  <span>Taxa por pedido</span
-                  ><span class="teal-text">R$ 0,00</span>
-                </div>
-                <div class="calc-row">
-                  <span>Mensalidade fixa</span><span>R$ 149,90</span>
-                </div>
-                <div class="calc-row total good-total">
-                  <span>Total no mês</span><span>R$ 149,90</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- PLANOS -->
   <div class="plans-section" id="planos">
     <div class="plans-inner">
@@ -332,48 +234,6 @@
         Sem taxa de setup &nbsp;·&nbsp; Sem fidelidade no mensal &nbsp;·&nbsp;
         Nota fiscal incluída
       </p>
-    </div>
-  </div>
-
-  <!-- DEPOIMENTO -->
-  <div class="testimonial-section">
-    <div class="testimonial-inner">
-      <blockquote>
-        Antes eu gastava horas toda semana tentando organizar os pedidos no
-        papel. Hoje abro o Comandei e em cinco minutos já sei o que aconteceu no
-        dia.
-      </blockquote>
-      <div class="testimonial-author">
-        <div class="author-avatar">MR</div>
-        <div class="author-info">
-          <div class="author-name">Marcos Rodrigues</div>
-          <div class="author-role">
-            Dono da Burger do Marcos — Feira de Santana, BA
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FAQ -->
-  <div class="faq-section">
-    <div class="faq-inner">
-      <div style="text-align: center; margin-bottom: 48px">
-        <div class="section-label" style="text-align: center">
-          Perguntas frequentes
-        </div>
-        <h2 style="text-align: center">
-          Tira as dúvidas<br /><em>antes de começar</em>
-        </h2>
-      </div>
-      <div
-        v-for="(item, i) in faqs"
-        :key="i"
-        :class="['faq-item', { open: item.open }]"
-      >
-        <div class="faq-q" @click="toggleFaq(i)">{{ item.q }}</div>
-        <div class="faq-a">{{ item.a }}</div>
-      </div>
     </div>
   </div>
 
@@ -681,7 +541,7 @@ function buildFeatures(p) {
 
 async function carregarPlanos() {
   try {
-    const res = await fetch("/api-planos/planos/search?sistemaNome=SGI");
+    const res = await fetch("/api-planos/planos/search?sistemaNome=COMANDEI%20DELIVERY");
     if (!res.ok) return;
     const data = await res.json();
     const apiPlanos = (data.content || [])
